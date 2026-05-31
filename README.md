@@ -1,8 +1,9 @@
 # My AI Tools
-##screenshot
+## 📸 Screenshot
+![MyAiTool](https://raw.githubusercontent.com/amanlakeviya/MyAiTool/main/IMG_0001.jpeg)
 
 ## Live Demo
-https://amankumarx.github.io/my-ai-tools/
+(https://amanlakeviya.github.io/MyAiTool/)
 
 A collection of useful AI tools in one place.
 
