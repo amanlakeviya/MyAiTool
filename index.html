@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>My AI Tools - Lakeviya | How to use (YouTube, Google, Wikipedia)</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #050508;
+    color: #e8e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ========== ANIMATED LAKEVIYA BACKGROUND ========== */
+  .lakeviya-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .lakeviya-text {
+    font-size: clamp(3rem, 15vw, 12rem);
+    font-weight: 900;
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #7c6aff20, #ff6a9c20, #6affcc20);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+    animation: lakeviyaFloat 8s ease-in-out infinite, lakeviyaRotate 12s linear infinite, lakeviyaGlow 3s ease-in-out infinite;
+    transform-origin: center;
+    letter-spacing: 0.1em;
+    user-select: none;
+  }
+
+  @keyframes lakeviyaFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+    25% { transform: translate(2%, -2%) scale(1.02); opacity: 0.2; }
+    50% { transform: translate(-2%, 1%) scale(0.98); opacity: 0.18; }
+    75% { transform: translate(1%, 2%) scale(1.01); opacity: 0.22; }
+  }
+
+  @keyframes lakeviyaRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes lakeviyaGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(124,106,255,0.2), 0 0 20px rgba(255,106,156,0.1); }
+    50% { text-shadow: 0 0 30px rgba(124,106,255,0.4), 0 0 50px rgba(255,106,156,0.2); }
+  }
+
+  /* Other 3D Background Layers */
+  .bg-container {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+  }
+
+  .bg-layer {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+  }
+
+  .bg-1 {
+    background: radial-gradient(ellipse at 30% 40%, rgba(124,106,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(255,106,156,0.1) 0%, transparent 50%);
+    animation: rotateSlow 40s linear infinite;
+  }
+
+  .bg-2 {
+    background: repeating-linear-gradient(45deg, rgba(124,106,255,0.02) 0px, rgba(124,106,255,0.02) 1px, transparent 1px, transparent 20px);
+    animation: shiftFast 15s linear infinite;
+  }
+
+  @keyframes rotateSlow {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes shiftFast {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+  }
+
+  /* Floating Particles */
+  .particle-3d {
+    position: fixed;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .particle {
+    position: absolute;
+    background: linear-gradient(135deg, #7c6aff, #ff6a9c);
+    border-radius: 50%;
+    filter: blur(6px);
+    animation: particleDrift 8s ease-in-out infinite;
+  }
+
+  @keyframes particleDrift {
+    0% { transform: translate(0, 0) scale(1); opacity: 0; }
+    20% { opacity: 0.4; }
+    80% { opacity: 0.2; }
+    100% { transform: translate(var(--tx, 100px), var(--ty, -100px)) scale(0); opacity: 0; }
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    padding: 1rem;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    transform-style: preserve-3d;
+    perspective: 500px;
+  }
+
+  .glow-text {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff, #7c6aff, #ff6a9c, #6affcc);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 4s ease infinite, titleFloat 2.5s ease-in-out infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes titleFloat {
+    0%, 100% { transform: translateZ(0px); text-shadow: 0 0 15px rgba(124,106,255,0.3); }
+    50% { transform: translateZ(30px); text-shadow: 0 0 40px rgba(124,106,255,0.6); }
+  }
+
+  .subtitle {
+    font-size: 0.7rem;
+    color: #8b8baa;
+    transform: translateZ(15px);
+  }
+
+  /* Search */
+  .search-wrapper {
+    max-width: 320px;
+    margin: 0 auto 1.5rem auto;
+    transform-style: preserve-3d;
+    perspective: 400px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 20px;
+    background: rgba(17, 17, 24, 0.5);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(124,106,255,0.3);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.4s;
+    text-align: center;
+  }
+
+  .search-input:focus {
+    transform: translateZ(15px) scale(1.02);
+    border-color: #7c6aff;
+    box-shadow: 0 0 30px rgba(124,106,255,0.4);
+  }
+
+  /* Tools Grid */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1rem;
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+
+  /* Card */
+  .card {
+    background: rgba(17, 17, 24, 0.45);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 0.9rem;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    border: 1px solid rgba(124,106,255,0.12);
+    animation: cardAppear 0.5s ease backwards;
+    animation-delay: calc(var(--i, 0) * 0.05s);
+    display: flex;
+    flex-direction: column;
+  }
+
+  @keyframes cardAppear {
+    from { opacity: 0; transform: translateY(40px) rotateX(15deg) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) rotateX(0) scale(1); }
+  }
+
+  .card:hover {
+    transform: translateY(-8px) translateZ(25px) rotateX(4deg) rotateY(3deg) scale(1.02);
+    border-color: rgba(124,106,255,0.4);
+    box-shadow: 0 25px 40px rgba(124,106,255,0.15);
+    background: rgba(35, 38, 55, 0.6);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, rgba(124,106,255,0.25), rgba(255,106,156,0.15));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    border: 1px solid rgba(124,106,255,0.25);
+    transition: all 0.4s;
+  }
+
+  .card:hover .card-icon {
+    transform: scale(1.08) rotateY(180deg) translateZ(8px);
+    box-shadow: 0 8px 20px rgba(124,106,255,0.3);
+  }
+
+  .card-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #fff, #c4b5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .card-purpose {
+    font-size: 0.7rem;
+    color: #c0c0d8;
+    line-height: 1.4;
+    margin-top: 8px;
+    padding: 8px 8px;
+    background: rgba(10, 10, 15, 0.5);
+    border-radius: 12px;
+    border-left: 2px solid #7c6aff;
+    flex: 1;
+  }
+
+  .card-tutorial {
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(124,106,255,0.2);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* Small learn button - "How to use" */
+  .learn-btn {
+    background: rgba(255, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #ffb3b3;
+    border: 1px solid rgba(255, 80, 80, 0.3);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .learn-btn:hover {
+    background: rgba(255, 50, 50, 0.25);
+    border-color: #ff5e7e;
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  /* ========== SIMPLE POPUP (only YouTube, Google, Wikipedia) ========== */
+  .simple-popup {
+    position: fixed;
+    z-index: 20000;
+    background: rgba(10, 10, 20, 0.95);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    border: 1px solid rgba(124, 106, 255, 0.5);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    width: 200px;
+    padding: 8px 0;
+    transform-origin: top left;
+    animation: popFade 0.2s ease;
+  }
+  @keyframes popFade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .popup-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    color: #e2e2ff;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .popup-item:hover {
+    background: rgba(124, 106, 255, 0.3);
+    color: white;
+  }
+  .popup-item span:first-child {
+    font-size: 1rem;
+  }
+
+  /* Footer */
+  .footer-3d {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: rgba(10,10,15,0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 50px;
+    border: 1px solid rgba(124,106,255,0.12);
+  }
+  .founder-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #7c6aff;
+    transition: all 0.4s;
+    object-fit: cover;
+  }
+  .founder-img:hover { transform: scale(1.1) rotate(360deg); }
+  .founder-name { color: #7c6aff; font-weight: 600; font-size: 0.7rem; }
+  .funded-by { color: #ff6a9c; font-size: 0.7rem; }
+  .empty-3d { text-align: center; padding: 2rem; background: rgba(17,17,24,0.3); backdrop-filter: blur(15px); border-radius: 30px; }
+  .cursor-3d {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,106,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  }
+  @media (max-width: 700px) {
+    .simple-popup { width: 180px; }
+    .popup-item { padding: 6px 12px; font-size: 0.75rem; }
+    .learn-btn { font-size: 0.65rem; padding: 3px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="lakeviya-bg"><div class="lakeviya-text">LAKEVIYA</div></div>
+<div class="bg-container"><div class="bg-layer bg-1"></div><div class="bg-layer bg-2"></div></div>
+<div class="particle-3d" id="particleContainer"></div>
+<div class="cursor-3d" id="cursor3d"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="glow-text">🤖 My AI Tools</div>
+    <div class="subtitle">✦ All World AI- Only This Platform✦</div>
+  </div>
+  <div class="search-wrapper"><input type="text" id="search" class="search-input" placeholder="🔍 Search tools... (press /)"></div>
+  <div class="tools-grid" id="toolsGrid"></div>
+  <div class="footer-3d">
+    <img src="https://res.cloudinary.com/ddlc9pfgn/image/upload/v1777464875/57b3c985-6692-4127-9f35-fe10a0ac492b_yodpaf.jpg" alt="founder" class="founder-img">
+    <span class="founder-name">Aman kumar</span>
+    <span style="color:#4a4a60;">✦</span>
+    <span class="funded-by">💎 Funded by Lakeviya</span>
+  </div>
+</div>
+
+<script>
+// ========== AI TOOLS DATA ==========
+const tools = [
+  { name: "ChatGPT", url: "https://chat.openai.com", icon: "🤖", purpose: "Yeh ChatGPT hai aur isliye hai kyunki yeh baat cheet karta hai, content likhta hai, aur coding mein help karta hai." },
+  { name: "Claude", url: "https://claude.ai", icon: "🧠", purpose: "Yeh Claude hai aur isliye hai kyunki yeh lambe documents padh sakta hai aur detailed analysis karta hai." },
+  { name: "Perplexity", url: "https://perplexity.ai", icon: "🔍", purpose: "Yeh Perplexity hai aur isliye hai kyunki yeh AI-powered search engine hai, citations ke saath answers deta hai." },
+  { name: "Gemini", url: "https://gemini.google.com", icon: "🌟", purpose: "Yeh Gemini hai aur isliye hai kyunki yeh Google ka multimodal AI hai." },
+  { name: "Deepseek", url: "https://chat.deepseek.com/", icon: "⚡", purpose: "DeepSeek ek advanced AI chatbot + coding AI hai jo China ki AI company DeepSeek AI ne develop kiya hai." },
+  { name: "Googal AI Studio", url: "https://aistudio.google.com", icon: "⚡", purpose: "ek advanced AI chatbot + coding AI hai jo googal ki AI company DeepSeek AI ne develop kiya hai." },
+  { name: "Rumik", url: "https://rumik.ai/", icon: "💬", purpose: "Iska use log normally AI se personal conversation karne ke liye karte hain." },
+  { name: "Higgsfield", url: "https://higgsfield.ai/", icon: "🎬", purpose: "ek Artificial Intelligence platform hai jo mainly AI videos, AI avatars aur AI content creation ke liye use hota hai." },
+  { name: "Madgicx", url: "https://madgicx.com", icon: "📈", purpose: "Madgicx ek AI-based marketing tool hai jo mainly Facebook Ads, Instagram Ads aur Google Ads ko automate aur optimize karne ke liye use hota hai." },
+  { name: "Vapi", url: "https://vapi.ai/", icon: "📞", purpose: "Vapi ka use hota hai AI phone caller / AI calling system banane ke liye." },
+  { name: "Julius", url: "https://julius.ai/", icon: "📊", purpose: "Yeh especially un logon ke liye bana hai jo data analysis, graphs, reports, aur prediction bina coding ke karna chahte hain" },
+  { name: "OpenClaw", url: "https://openclaw.ai/", icon: "🌟", purpose: "OpenClaw ek open-source AI agent framework hai jo basically “AI assistant jo real kaam kare” uske liye use hoti hai. Iska kaam sirf chat karna nahi, balki computer aur apps ko control karna bhi hota hai. " },
+   { name: "Hermes Agent", url: "https://hermes-agent.nousresearch.com/", icon: "💬", purpose: "Hermes Agent ek advanced autonomous AI agent framework hai jo specially long-term memory aur self-improvement ke liye bana hai. Isko mainly Nous Research ne develop kiya hai." },
+   { name: "ChatGPT Atlas", url: "https://chatgpt.com/atlas/", icon: "🔍", purpose: "ChatGPT Atlas ek AI-powered web browser hai jo OpenAI ne banaya hai. Ye normal Chrome ya Edge jaisa browser nahi hai — isme ChatGPT directly browser ke andar integrated hota hai" },
+   { name: "Feedly", url: "https://feedly.com/", icon: "🕸️", purpose: "Feedly ek AI-powered news aggregator aur research platform hai. Simple language me: ye internet ke blogs, news websites, YouTube channels, newsletters, Reddit feeds, research sources ko ek jagah collect karta hai." },
+   { name: "Ollama", url: "https://ollama.com/", icon: "🌟", purpose: "Ollama ek software hai jo tumhare laptop/PC par AI models locally run karne deta hai — bina cloud API ke" },
+   { name: "Make", url: "https://www.make.com/en", icon: "⚙️", purpose: "Make ek no-code automation platform hai jisse tum different apps ko connect karke automatic workflows bana sakte ho. Pehle iska naam “Integromat” tha" },
+   { name: "zapier", url: "https://zapier.com/", icon: "🧩", purpose: "zapier ek no-code automation platform hai jisse tum different apps ko connect karke automatic workflows bana sakte ho." },
+   { name: "n8n", url: "https://n8n.io/", icon: "📊", purpose: "n8n ek no-code automation platform hai jisse tum different apps ko connect karke automatic workflows bana sakte ho" },
+   { name: "Manus", url: "https://manus.im/", icon: "🧩", purpose: "Manus ek autonomous AI agent platform hai jo “AI that actually does work” concept par focus karta hai." },
+    { name: "Arena", url: "https://arena.ai/", icon: "🕸️", purpose: "Arena ek autonomous AI agent platform hai jo “AI that actually does work” concept par focus karta hai." },
+ { name: "Replit", url: "https://replit.com", icon: "💻", purpose: "Replit ek online coding platform hai jahan tum bina kuch install kiye browser se hi coding kar sakte ho." },
+  { name: "Emergent", url: "https://emergent.sh", icon: "🧩", purpose: "non-coders aur founders ke liye bani hai jo idea se direct app banana chahte hain — bina coding sikhe." },
+  { name: "Paperclip", url: "https://github.com/paperclipai", icon: "🧷", purpose: "Yha pr sare agent ko combine krke work kraya jata h..open source" },
+  { name: "Polsia", url: "https://polsia.com/", icon: "🏢", purpose: "AI Autonomous Company Platform hai, Polsia = AI jo poori company ko automatically run karne ki koshish karta hai." },
+  { name: "Nas", url: "https://nas.com/", icon: "🛍️", purpose: "Start selling from a single photo" },
+  { name: "Pietra", url: "https://www.pietrastudio.com/", icon: "🏭", purpose: "Pietra ek e-commerce brand-building platform hai. Apna product brand start karna — bina factory aur bina inventory ke." },
+  { name: "Curaa", url: "https://curaos.com/", icon: "⚙️", purpose: "CuraOS AI-powered management platform hai jo mainly business operations ya care services manage karne ke liye use hota hai." },
+  { name: "Apify", url: "https://apify.com/", icon: "🕸️", purpose: "Internet ki websites se automatic data nikalna (without manual copying)." },
+  { name: "Kimi", url: "https://www.kimi.com/", icon: "🔥", purpose: "Kimi = AI jo sirf jawab nahi deta, kaam karke deta hai." },
+  { name: "Grok", url: "https://grok.com/", icon: "🌌", purpose: "Grok ek AI chatbot hai jo xAI ne banaya hai. Grok = Elon Musk ka AI assistant (ChatGPT jaisa, but different style)" },
+  { name: "HuggingFace", url: "https://huggingface.co/", icon: "🤗", purpose: "Hugging Face AI world ki sabse important websites me se ek hai, Hugging Face = AI tools + AI models + AI community ka biggest hub" },
+  { name: "Midjourney", url: "https://midjourney.com", icon: "🎨", purpose: "Yeh Midjourney hai aur isliye hai kyunki yeh text se AI art aur illustrations generate karta hai." },
+  { name: "Copilot", url: "https://github.com/features/copilot", icon: "👨‍💻", purpose: "Yeh Copilot hai aur isliye hai kyunki yeh real-time code complete karta hai aur bugs fix karta hai." },
+  { name: "Runway ML", url: "https://runwayml.com", icon: "🎬", purpose: "Yeh Runway hai aur isliye hai kyunki yeh AI video editing aur text-to-video generation karta hai." },
+  { name: "ElevenLabs", url: "https://elevenlabs.io", icon: "🎙️", purpose: "Yeh ElevenLabs hai aur isliye hai kyunki yeh realistic AI voice generation karta hai." },
+  { name: "Notion AI", url: "https://notion.so", icon: "📝", purpose: "Yeh Notion AI hai aur isliye hai kyunki yeh notes likhne aur summarize karne mein help karta hai." },
+  { name: "DALL-E 3", url: "https://openai.com/dall-e-3", icon: "🖼️", purpose: "Yeh DALL-E hai aur isliye hai kyunki yeh OpenAI ka image generator hai." },
+  { name: "Gamma AI", url: "https://gamma.app", icon: "📊", purpose: "Yeh Gamma hai aur isliye hai kyunki yeh AI-powered presentations banata hai." },
+  { name: "Leonardo AI", url: "https://leonardo.ai", icon: "🎮", purpose: "Yeh Leonardo hai aur isliye hai kyunki yeh game assets generate karta hai." },
+  { name: "Pika Labs", url: "https://pika.art", icon: "🎥", purpose: "Yeh Pika hai aur isliye hai kyunki yeh text se video generate karta hai." }];
+
+let currentSearch = "";
+let activePopup = null;
+
+// Particles
+function createParticles() {
+  const container = document.getElementById('particleContainer');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 30 + 15;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+    p.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+    p.style.animationDelay = Math.random() * 8 + 's';
+    container.appendChild(p);
+  }
+}
+
+function getFilteredTools() {
+  let f = [...tools];
+  if (currentSearch.trim()) {
+    const q = currentSearch.toLowerCase();
+    f = f.filter(t => t.name.toLowerCase().includes(q) || t.purpose.toLowerCase().includes(q));
+  }
+  return f;
+}
+
+function openTool(url) {
+  let finalUrl = url;
+  if (!url.startsWith('http')) finalUrl = 'https://' + url;
+  window.open(finalUrl, '_blank');
+}
+
+// ========== SIMPLE POPUP with only YouTube, Google, Wikipedia ==========
+function showLearnPopup(toolName, event) {
+  if (activePopup) activePopup.remove();
+  
+  const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(toolName + "Hiw to use tutorial step by step with youtube playlist")}`;
+  const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(toolName + " how to use guide")}`;
+  const wikipediaUrl = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(toolName + "How to use this tool about article this tool ")}`;
+  
+  const popup = document.createElement('div');
+  popup.className = 'simple-popup';
+  popup.innerHTML = `
+    <div class="popup-item" data-type="youtube">
+      <span>🎬</span> <span>YouTube Tutorials</span>
+    </div>
+    <div class="popup-item" data-type="google">
+      <span>🔍</span> <span>Google Search</span>
+    </div>
+    <div class="popup-item" data-type="wikipedia">
+      <span>📖</span> <span>Wikipedia</span>
+    </div>
+  `;
+  
+  const button = event.target.closest('.learn-btn');
+  if (button) {
+    const rect = button.getBoundingClientRect();
+    popup.style.left = rect.left + 'px';
+    popup.style.top = (rect.bottom + 5) + 'px';
+    setTimeout(() => {
+      const popupRect = popup.getBoundingClientRect();
+      if (popupRect.right > window.innerWidth) {
+        popup.style.left = (window.innerWidth - popupRect.width - 10) + 'px';
+      }
+    }, 0);
+  } else {
+    popup.style.left = '50%';
+    popup.style.top = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+  }
+  
+  popup.querySelector('[data-type="youtube"]').addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.open(youtubeUrl, '_blank');
+    popup.remove();
+    activePopup = null;
+  });
+  popup.querySelector('[data-type="google"]').addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.open(googleUrl, '_blank');
+    popup.remove();
+    activePopup = null;
+  });
+  popup.querySelector('[data-type="wikipedia"]').addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.open(wikipediaUrl, '_blank');
+    popup.remove();
+    activePopup = null;
+  });
+  
+  document.body.appendChild(popup);
+  activePopup = popup;
+  
+  const closeHandler = (e) => {
+    if (!popup.contains(e.target)) {
+      popup.remove();
+      activePopup = null;
+      document.removeEventListener('click', closeHandler);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      popup.remove();
+      activePopup = null;
+      document.removeEventListener('click', closeHandler);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  setTimeout(() => {
+    document.addEventListener('click', closeHandler);
+    document.addEventListener('keydown', escHandler);
+  }, 0);
+}
+
+// Render cards with "How to use" button
+function renderCards() {
+  const filtered = getFilteredTools();
+  const grid = document.getElementById('toolsGrid');
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-3d">✨ No tools found ✨<br><span style="font-size:0.65rem;">Try searching something else</span></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map((t, idx) => {
+    const safeName = escapeHtml(t.name);
+    const safePurpose = escapeHtml(t.purpose);
+    return `
+      <div class="card" onclick="openTool('${t.url}')" style="--i: ${idx}">
+        <div class="card-header">
+          <div class="card-icon">${t.icon}</div>
+          <div class="card-name">${safeName}</div>
+        </div>
+        <div class="card-purpose">🎯 ${safePurpose}</div>
+        <div class="card-tutorial">
+          <button class="learn-btn" data-tool="${t.name.replace(/'/g, "\\'")}">📘 How to use</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  document.querySelectorAll('.learn-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const toolName = btn.getAttribute('data-tool');
+      if (toolName) showLearnPopup(toolName, e);
+    });
+  });
+  attachTiltEvents();
+}
+
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+
+function attachTiltEvents() {
+  document.querySelectorAll('.card').forEach(card => {
+    card.removeEventListener('mousemove', tiltMove);
+    card.removeEventListener('mouseleave', tiltLeave);
+    card.addEventListener('mousemove', tiltMove);
+    card.addEventListener('mouseleave', tiltLeave);
+  });
+}
+function tiltMove(e) {
+  const rect = this.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  this.style.transform = `translateY(-8px) translateZ(25px) rotateX(${y * 8}deg) rotateY(${x * 8}deg) scale(1.02)`;
+}
+function tiltLeave() { this.style.transform = ''; }
+
+// Search & init
+document.getElementById('search').addEventListener('input', e => { currentSearch = e.target.value; renderCards(); });
+document.addEventListener('keydown', e => {
+  if (e.key === '/') { e.preventDefault(); document.getElementById('search').focus(); }
+  if (e.key === 'Escape') {
+    document.getElementById('search').blur();
+    if (activePopup) { activePopup.remove(); activePopup = null; }
+  }
+});
+const cursor = document.getElementById('cursor3d');
+document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+
+createParticles();
+renderCards();
+</script>
+</body>
+</html>
